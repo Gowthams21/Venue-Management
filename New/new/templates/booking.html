@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="title">Venue Booking Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        title{
+            align-items: center;
+        }
+
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            margin-top: 10px;
+            display: block;
+            font-weight: bold;
+        }
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            font-family: Arial, Helvetica, sans-serif;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            align-items: center;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .for {
+            margin-left: 320px;
+            /* Adjust margin to leave space for the side navigation */
+        }
+
+        .sidenav {
+            height: auto;
+            width: 300px;
+            position: fixed;
+            top: 10%;
+            left: 0;
+            /* Set left to 0 to align with the left edge of the page */
+            bottom: 0;
+            background-color: #312c2c;
+            padding-top: 50px;
+            overflow: auto;
+        }
+
+        .sidenav a {
+            padding: 6px 8px 30px 8px;
+            font-size: 25px;
+            color: #b79b9b;
+            display: block;
+            text-decoration: none;
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+
+        .main {
+            margin-left: 320px;
+            /* Adjust margin to leave space for the side navigation */
+            font-size: 28px;
+            padding: 0px 10px;
+            left: 40px;
+            /* Not necessary to set left if margin-left is set */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidenav" style="text-align: center;">
+        <a href="base.html">Dashboard</a>
+        <a href="venues.html">Venues</a>
+        <a href="booking.html">Book a Venue</a>        
+        <a href="query.html">Post Queries</a>
+        <a href="logout.html">Send us Feedback</a>
+    </div>
+    <div class="for">
+        <h1 style="text-align: center;">Venue Booking Form</h1>
+
+        <form id="bookingForm" action="/book/" method="post">
+            {% csrf_token %}
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required><br>
+            <label for="time">Time:</label>
+            <input type="time" id="time" name="time" required><br>
+            <label for="organizer">Organizer:</label>
+            <input type="text" id="organizer" name="organizer" required><br>
+            <label for="reason">Reason for Booking:</label>
+            <input type="text" id="reason" name="reason" required><br>
+            <label for="venue">Venue:</label>
+            <select id="venue" name="venue" required onchange="updateSubvenues()">
+                <option value="">Please select</option>
+                <option value="Auditorium">Auditorium</option>
+                <option value="Seminar Hall">Seminar Hall</option>
+                <option value="Conference Hall">Conference Hall</option>
+                <option value="Labs">Computer Labs</option>
+                <option value="Classroom">Class Rooms</option>
+            </select><br>
+            <label for="subvenue" style="display: none;">Sub-Venue:</label>
+            <select id="subvenue" name="subvenue" style="display: none;"></select><br>
+            <label for="refreshments">Refreshments Required:</label>
+            <select id="refreshments" name="refreshments" required>
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </select><br>
+            <label for="chiller">Chiller Plant:</label>
+            <select id="chiller" name="chiller" required>
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </select><br>
+            <button style="text-align: center" type="submit" >Submit Booking</button>
+        </form>
+    </div>
+    <script>
+        function updateSubvenues() {
+            var venue = document.getElementById('venue').value;
+            var subvenue = document.getElementById('subvenue');
+            var labelSubvenue = document.querySelector('label[for="subvenue"]');
+            subvenue.innerHTML = '';
+            if (venue) {
+                subvenue.style.display = 'inline';
+                labelSubvenue.style.display = 'inline';
+                var options = [];
+                if (venue === "Labs") {
+                    options = [
+                        //AIDS
+                        { value: "none", text: "Select Lab" },
+                        { value: "AIDS Lab 1", text: "AIDS Lab 1" },
+                        { value: "AIDS Lab 2", text: "AIDS Lab 2" },
+                        { value: "AIDS Lab 3", text: "AIDS Lab 3" },
+                        //AIML
+                        { value: "AIML Lab 1", text: "AIML Lab 1" },
+                        { value: "AIML Lab 2", text: "AIML Lab 2" },
+                        { value: "AIML Lab 3", text: "AIML Lab 3" },
+                        { value: "AIML Lab 4", text: "AIML Lab 4" },
+                        { value: "AIML Lab 5", text: "AIML Lab 5" },
+                        { value: "AIML Lab 6", text: "AIML Lab 6" },
+                        //BME
+                        { value: "BME Computer Center", text: "BME Computer Center" },
+                        { value: "BIO MECHANICS", text: "BIO MECHANICS" },
+                        { value: "BIO INFORMATICS", text: "BIO INFORMATICS" },
+                        { value: "THRED MILL LAB", text: "THRED MILL LAB" },
+                        { value: "BIO SPECIAL LAB", text: "BIO SPECIAL LAB" },
+                        //CIVIL ,CSBS
+                        { value: "CIVIL Computer Aided Design Laboratory", text: "CIVIL Computer Aided Design Laboratory" },
+                        { value: "CSBS Network Laboratory", text: "CSBS Network Laboratory" },
+                        { value: "CSBS Programming & Data Structures Laboratory", text: "CSBS Programming & Data Structures Laboratory" },
+                        // CSE & CT
+                        { value: "CSE Lab 1", text: "CSE Lab 1" },
+                        { value: "CSE Lab 2", text: "CSE Lab 2" },
+                        { value: "CSE Lab 3", text: "CSE Lab 3" },
+                        { value: "CSE Lab 4", text: "CSE Lab 4" },
+                        { value: "CSE Lab 5", text: "CSE Lab 5" },
+                        { value: "CT Lab", text: "CT Lab" },
+                        // ECE
+                        { value: "Digital Signal Processing Laboratory (CC Lab)", text: "Digital Signal Processing Laboratory" },
+                        { value: "Networks Laboratory", text: "Networks Laboratory" },
+                        { value: "VLSI Design Laboratory", text: "VLSI Design Laboratory" },
+                        { value: "Microcontrollers Laboratory", text: "Microcontrollers Laboratory" },
+                        { value: "Digital Electronics / Microprocessor Laboratory", text: "Digital Equipment / Microprocessor Laboratory" },
+                        { value: "Advanced Communication Systems Laboratory", text: "Advanced Communication Systems Laboratory" },
+                        { value: "Signal Processing Laboratory PCB LAB", text: "Signal Processing Laboratory PCB LAB" },
+                        //ELCC and EIE
+                        { value: "EEE COMPUTER CENTRE - I", text: "EEE COMPUTER CENTRE - I" },
+                        { value: "EEE COMPUTER CENTRE - II", text: "EEE COMPUTER CENTRE - II" },
+                        { value: "EIE Process Control CC Laboratory", text: "EIE Process Control CC Laboratory" },
+                        { value: "EIE Embedded Lab", text: "EIE Embedded Lab" },
+                        { value: "CEIA Computer Centre", text: "CEIA Computer Centre" },
+                        { value: "ELCC AUDIO INTERACTIVE LAB", text: "ELCC AUDIO INTERACTIVE LAB" },
+                        { value: "ELCC MULTIMEDIA LAB", text: "ELCC MULTIMEDIA LAB" },
+                        // FOOD AND FT AND ISE 
+                        { value: "Food Informatics Centre", text: "Food Informatics Centre" },
+                        { value: "FT Computer Aided Apparel Design Laboratory", text: "FT Computer Aided Apparel Design Laboratory" },
+                        { value: "ISE LAB 2 - Database Technologies & Web Frame Work Laboratory", text: "ISE LAB 2 - Database Technologies & Web Frame" },
+                        //IT
+                        { value: "IT Lab 1", text: "IT Lab 1" },
+                        { value: "IT Lab 2", text: "IT Lab 2" },
+                        { value: "IT Lab 3", text: "IT Lab 3" },
+                        { value: "IT Lab 4", text: "IT Lab 4" },
+                        { value: "IT Lab 5", text: "IT Lab 5" },
+                        // MECH & SMS & TEXTILE
+                        { value: "Mech Harita Laboratory", text: "Mech Harita Laboratory" },
+                        { value: "Mech CAD Laboratory", text: "Mech CAD Laboratory" },
+                        { value: "Mech CAM Laboratory", text: "Mech CAM Laboratory" },
+                        { value: "SMS Business Application Software Lab", text: "SMS Business Application Software Lab" },
+                        { value: "Textile CAD Laboratory", text: "Textile CAD Laboratory" },
+                        // GURUGULAM
+                        { value: "INTERNET CENTRE", text: "InterNET CENTRE" },
+                        { value: "GURUGULAM (OLD SALZER LAB)", text: "GURUGULAM (OLD SALZER LAB" },
+                        { value: "GURUGULAM (SERVO LAB)", text: "GURUGULAM (SERVO LAB)" },
+                        { value: "GURUGULAM (PLC)", text: "GURUGULAM (PLC)" },
+                        { value: "GURUGULAM (WIRING LAB)", text: "GURUGULAM (WIRING LAB)" },
+                        { value: "GURUGULAM (ELECTRONICS PRODUCT DEVE LAB)", text: "GURUGULAM (ELECTRONICS PRODUCT DEVE LAB)" },
+                        // LC & SPECIAL LABS
+                        { value: "DIGITAL LIBRARY", text: "DIGITAL LIBRARY" },
+                        { value: "ISE LAB 1 - COMPUTER CENTRE", text: "ISE LAB 1 - COMPUTER CENTRE" },
+                        { value: "ADVANCED COMPUTING CENTRE", text: "ADVANCED COMPUTING CENTRE" },
+                        { value: "ECE - SLB041 - PRINTED CIRCUIT BOARD (PCB) LAB", text: "ECE - PRINTED CIRCUIT BOARD" },
+                        { value: "ECE - SLB009 - COMMUNICATION PROTOCOL", text: "ECE - COMMUNICATION PROTOCOL" },
+                        { value: "ECE - SLB038 - INTELLIGENT COMMUNICATION AND EMBEDDED", text: "ECE - INTELLIGENT COMMUNICATION AND EMBEDDED" },
+                        { value: "ECE - SLB055 - VIRTUAL INSTRUMENTATION LAB", text: "ECE - VIRTUAL INSTRUMENTATION LAB" },
+                        { value: "EEE - SLB064 - ELECTRICAL INTEGRATED", text: "EEE - ELECTRICAL INTEGRATED" },
+                        { value: "BIOTECH - SLB077 - COMPUTATIONAL BIOLOGY LAB", text: "BIOTECH - COMPUTATIONAL BIOLOGY LAB" },
+                    ];
+                } else if (venue === "Auditorium") {
+                    options = [
+                        { value: "Main Auditorium", text: "Main Auditorium" },
+                        { value: "Vedanyagam Auditorium", text: "Vedanayagam Auditorium" }
+                    ];
+                } else if (venue === "Seminar Hall") {
+                    options = [
+                        { value: "Textile Seminar Hall", text: "Textile Seminar Hall" },
+                        { value: "Biotech Seminar Hall", text: "Biotech Seminar Hall" },
+                        { value: "Mechanical Smart class", text: "Mechanical Smart Class" },
+                        { value: "ECE Seminar Hall", text: "ECE Seminar Hall" },
+                        { value: "Aero Seminar Hall", text: "Aero Seminar Hall" },
+                        { value: "Old Mechanical Semianr Hall", text: "Old Mechanical Semianr Hall" },
+                        { value: "SF 1 Seminar Hall", text: "SF 1 Seminar Hall" },
+                        { value: "SF 2 Seminar Hall", text: "SF 2 Seminar Hall" },
+                        { value: "SF 3 Seminar Hall", text: "SF 3 Seminar Hall" },
+                        { value: "EEE Seminar Hall", text: "EEE Seminar Hall" },
+                        { value: "Yoga Hall", text: "Yoga Hall" },
+                    ];
+                } else if (venue === "Conference Hall") {
+                    options = [
+                        { value: "Civil Conference Room", text: "Civil Conference Room" },
+                        { value: "LC - CR 1 floor", text: "LC - CR 1 floor" },
+                        { value: "LC - CR 2 floor", text: "LC - CR 2 floor" },
+                        { value: "LC - CR 3 floor", text: "LC - CR 3 floor" },
+                        { value: "Mechanical Conference Room", text: "Mechanical Conference Room" },
+                        { value: "EEE Smart class room", text: "EEE Smart Class Room" },
+                    ];
+                } else if (venue === "Classroom") {
+                    options = [
+                        //MECHANICAL
+                        { value: "ME 103", text: "ME 103" },
+                        { value: "ME 104", text: "ME 104" },
+                        { value: "ME 107", text: "ME 107" },
+                        { value: "ME 201", text: "ME 201" },
+                        { value: "ME 202", text: "ME 202" },
+                        { value: "ME 203", text: "ME 203" },
+                        { value: "ME 204", text: "ME 204" },
+                        { value: "ME 205", text: "ME 205" },
+                        { value: "ME 206", text: "ME 206" },
+                        { value: "ME 301", text: "ME 301" },
+                        { value: "ME 302", text: "ME 302" },
+                        { value: "ME 303", text: "ME 303" },
+                        { value: "ME 304", text: "ME 304" },
+                        { value: "ME 305", text: "ME 305" },
+                        { value: "ME 306", text: "ME 306" },
+                        // WESTERN WING
+                        { value: "WW 001", text: "WW 001" },
+                        { value: "WW 002", text: "WW 002" },
+                        { value: "WW 003", text: "WW 003" },
+                        { value: "WW 004", text: "WW 004" },
+                        { value: "WW 005", text: "WW 005" },
+                        { value: "WW 006", text: "WW 006" },
+                        { value: "WW 007", text: "WW 007" },
+                        { value: "WW 008", text: "WW 008" },
+                        { value: "WW 009", text: "WW 009" },
+                        { value: "WW 010", text: "WW 010" },
+                        { value: "WW 011", text: "WW 011" },
+                        { value: "WW 012", text: "WW 012" },
+                        // 101
+                        { value: "WW 101", text: "WW 101" },
+                        { value: "WW 102", text: "WW 102" },
+                        { value: "WW 103", text: "WW 103" },
+                        { value: "WW 106", text: "WW 106" },
+                        { value: "WW 107", text: "WW 107" },
+                        { value: "WW 108", text: "WW 108" },
+                        { value: "WW 109", text: "WW 109" },
+                        { value: "WW 110", text: "WW 110" },
+                        { value: "WW 111", text: "WW 111" },
+                        { value: "WW 112", text: "WW 112" },
+                        { value: "WW 113", text: "WW 113" },
+                        { value: "WW 114", text: "WW 114" },
+                        { value: "WW 115", text: "WW 115" },
+                        { value: "WW 116", text: "WW 116" },
+                        { value: "WW 117", text: "WW 117" },
+                        { value: "WW 118", text: "WW 118" },
+                        // 201
+                        { value: "WW 201", text: "WW 201" },
+                        { value: "WW 202", text: "WW 202" },
+                        { value: "WW 203", text: "WW 203" },
+                        { value: "WW 204", text: "WW 204" },
+                        { value: "WW 205", text: "WW 205" },
+                        { value: "WW 206", text: "WW 206" },
+                        { value: "WW 207", text: "WW 207" },
+                        { value: "WW 208", text: "WW 208" },
+                        { value: "WW 209", text: "WW 209" },
+                        { value: "WW 210", text: "WW 210" },
+                        { value: "WW 211", text: "WW 211" },
+                        { value: "WW 212", text: "WW 212" },
+                        { value: "WW 213", text: "WW 213" },
+                        { value: "WW 214", text: "WW 214" },
+                        { value: "WW 215", text: "WW 215" },
+                        { value: "WW 216", text: "WW 216" },
+                        { value: "WW 217", text: "WW 217" },
+                        { value: "WW 218", text: "WW 218" },
+                        { value: "WW 219", text: "WW 219" },
+                        { value: "WW 220", text: "WW 220" },
+                        { value: "WW 221", text: "WW 221" },
+                        { value: "WW 222", text: "WW 222" },
+                        { value: "WW 223", text: "WW 223" },
+                        { value: "WW 224", text: "WW 224" },
+                        { value: "WW 225", text: "WW 225" },
+                        { value: "WW 226", text: "WW 226" },
+                        { value: "WW 227", text: "WW 227" },
+
+                        //EASTERN WING
+                        { value: "EW 101", text: "EW 101" },
+                        { value: "EW 102", text: "EW 102" },
+                        { value: "EW 103", text: "EW 103" },
+                        { value: "EW 104", text: "EW 104" },
+                        { value: "EW 105", text: "EW 105" },
+                        { value: "EW 106", text: "EW 106" },
+                        { value: "EW 107", text: "EW 107" },
+                        { value: "EW 108", text: "EW 108" },
+                        { value: "EW 109", text: "EW 109" },
+                        { value: "EW 110", text: "EW 110" },
+                        { value: "EW 111", text: "EW 111" },
+                        { value: "EW 112", text: "EW 112" },
+                        { value: "EW 113", text: "EW 113" },
+                        { value: "EW 114", text: "EW 114" },
+                        { value: "EW 115", text: "EW 115" },
+                        { value: "EW 116", text: "EW 116" },
+                        { value: "EW 117", text: "EW 117" },
+                        { value: "EW 118", text: "EW 118" },
+                        //200
+                        { value: "EW 201", text: "EW 201" },
+                        { value: "EW 202", text: "EW 202" },
+                        { value: "EW 203", text: "EW 203" },
+                        { value: "EW 204", text: "EW 204" },
+                        { value: "EW 205", text: "EW 205" },
+                        { value: "EW 206", text: "EW 206" },
+                        { value: "EW 207", text: "EW 207" },
+                        { value: "EW 208", text: "EW 208" },
+                        { value: "EW 209", text: "EW 209" },
+                        { value: "EW 210", text: "EW 210" },
+                        { value: "EW 211", text: "EW 211" },
+                        { value: "EW 212", text: "EW 212" },
+                        { value: "EW 213", text: "EW 213" },
+                        { value: "EW 214", text: "EW 214" },
+                        { value: "EW 215", text: "EW 215" },
+                        { value: "EW 216", text: "EW 216" },
+                        { value: "EW 217", text: "EW 217" },
+                        { value: "EW 218", text: "EW 218" },
+                        // SUNFLOWER
+                        { value: "IT 001", text: "IT 001" },
+                        { value: "IT 002", text: "IT 002" },
+                        { value: "IT 003", text: "IT 003" },
+                        { value: "IT 102", text: "IT 102" },
+                        { value: "IT 103", text: "IT 103" },
+                        { value: "CS 201", text: "CS 201" },
+                        { value: "CS 202", text: "CS 202" },
+                        { value: "CS 203", text: "CS 203" },
+                        { value: "CS 301", text: "CS 301" },
+                        { value: "CS 302", text: "CS 302" },
+                        { value: "CS 303", text: "CS 303" },
+                        //AERO
+                        { value: "AE 101", text: "AE 101" },
+                        { value: "AE 102", text: "AE 102" },
+                        { value: "MH 202", text: "MH 202" },
+                        { value: "MH 203", text: "MH 203" },
+                        { value: "MH 301", text: "AE 301" },
+                        { value: "MH 302", text: "AE 302" },
+                        { value: "MH 303", text: "AE 303" },
+                        { value: "MH 305", text: "AE 305" },
+                        { value: "MH 306", text: "AE 306" },
+                        { value: "Mech Drawing Hall", text: "Mech Drawing Hall" },
+                    ];
+                }
+                options.forEach(function (option) {
+                    var opt = document.createElement('option');
+                    opt.value = option.value;
+                    opt.textContent = option.text;
+                    subvenue.appendChild(opt);
+                });
+            } else {
+                subvenue.style.display = 'none';
+                labelSubvenue.style.display = 'none';
+                return;
+            }
+        }
+    </script>
+
+</body>
+
+</html>

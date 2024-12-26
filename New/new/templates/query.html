@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+        }
+
+        #btnsubmit {
+            background-color: #0074D9;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 50px;
+            display: block;
+            margin: 10px auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-control:focus {
+            border-color: #0056b3;
+            outline: none;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+        }
+        
+.for {
+    margin-left: 320px; /* Adjust margin to leave space for the side navigation */
+}
+
+.sidenav {
+    height: auto;
+    width: 300px;
+    position: fixed;
+    top: 10%;
+    left: 0; /* Set left to 0 to align with the left edge of the page */
+    bottom: 0;
+    background-color: #60e5ef;
+    padding-top: 50px;
+    overflow: auto;
+}
+
+.sidenav a {
+    padding: 6px 8px 30px 8px;
+    font-size: 25px;
+    color: black;
+    display: block;
+    text-decoration: none;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+.main {
+    top: 20px;
+    margin-left: 320px; /* Adjust margin to leave space for the side navigation */
+    font-size: 28px;
+    padding: 0px 10px;
+    left: 40px; /* Not necessary to set left if margin-left is set */
+}
+body{ font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 50px 20px 20px 20px;
+            background-color: #f4f4f4;}
+    </style>
+</head>
+<body>
+    <div class="sidenav" style="text-align: center;">
+        <a href="base.html">Dashboard</a>
+        <a href="venues.html">Venues</a>
+        <a href="booking.html">Book a Venue</a>        
+        <a href="query.html">Post Queries</a>
+        <a href="logout.html">Send us Feedback</a>
+      </div>
+    <form action="/query/" method="post" class="main">
+        {% csrf_token %}        
+        <div class="form-group">
+            <label for="name">Organizer</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Club/Department">
+        </div>
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Organizer.bitsathy.ac.in">
+        </div>
+        <div class="form-group">
+            <label for="phone">Contact</label>
+            <input type="phone" class="form-control" id="phone" name="phone" placeholder="Number">
+        </div>
+        <div class="form-group">
+            <label for="desc">Tell Us Your Query</label>
+            <textarea class="form-control" id="desc" name="desc" rows="3"></textarea>
+        </div>
+        <button id="btnsubmit" type="submit" class="btnsubmit" name="">Submit</button>
+    </form>
+</body>
+</html>
